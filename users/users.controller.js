@@ -1,14 +1,13 @@
-
-const express = require ('express');
+const express = require('express');
 const router = express.Router();
 const Joi = require('joi');
-const validateRequest = require('../_middleware/validate-handler');
+const validateRequest = require('_middleware/validate-request');
 const Role = require('_helpers/role');
 const userService = require('./user.service');
 
 // routes
 
-router.get('/' ,getAll);
+router.get('/', getAll);
 router.get('/:id', getById);
 router.post('/', createSchema, create);
 router.put('/:id', updateSchema, update);
@@ -25,21 +24,21 @@ function getAll(req, res, next) {
 }
 
 function getById(req, res, next) {
-    userService.getAll()
+    userService.getById(req.params.id)
         .then(user => res.json(user))
         .catch(next);
 }
 
 function create(req, res, next) {
-    userService.update(req.params.id, req.body)
-        .then(() => res.json({ message: 'User updated' }))
+    userService.create(req.body)
+        .then(() => res.json({ message: 'User created' }))
         .catch(next);
 }
 
 function update(req, res, next) {
-    userService.create(req.body)
-    .then(() => res.json({ message: 'User created' }))
-    .catch(next);
+    userService.update(req.params.id, req.body)
+        .then(() => res.json({ message: 'User updated' }))
+        .catch(next);
 }
 
 function _delete(req, res, next) {
